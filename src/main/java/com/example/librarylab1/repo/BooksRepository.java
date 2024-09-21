@@ -24,7 +24,8 @@ public interface BooksRepository extends JpaRepository<Books, Long> {
                              @Param("end_date") LocalDate end_date,
                              @Param("studentName") String studentName,
                              Sort sort);
-
+    @Query("SELECT b.give_date, COUNT(b) FROM Books b GROUP BY b.give_date")
+    List<Object[]> findBookIssueStats();
 
 
 }

@@ -6,43 +6,10 @@
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
 
-
-<!--<div class="album py-5 bg-body-tertiary">-->
-<!--    <div class="container">-->
-
-<!--        &lt;!&ndash; Центрируем ряды и карточки по горизонтали &ndash;&gt;-->
-<!--        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 justify-content-center">-->
-<!--            <div th:each="book : ${books}" class="d-flex justify-content-center">-->
-<!--                <div class="col">-->
-<!--                    <div class="card shadow-sm">-->
-<!--                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">-->
-<!--                            <title>Placeholder</title>-->
-<!--                            <rect width="100%" height="100%" fill="#55595c"></rect>-->
-<!--                            <text x="50%" y="50%" fill="#eceeef" dy=".3em" th:text="${book.title}"></text>-->
-<!--                        </svg>-->
-<!--                        <div class="card-body">-->
-<!--                            <p class="card-text" th:text="'Автор: ' + ${book.author}"></p>-->
-<!--                            <p class="card-text" th:text="'ISBN: ' + ${book.isbn}"></p>-->
-<!--                            <div class="d-flex justify-content-between align-items-center">-->
-<!--                                <div class="btn-group">-->
-<!--                                    <button type="button" class="btn btn-warning">Сохранить</button>-->
-<!--                                </div>-->
-<!--                                <div class="btn-group">-->
-<!--                                    <button type="button" class="btn btn-warning">Удалить</button>-->
-<!--                                </div>-->
-
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
     <div class="col-md-6 p-lg-5 mx-auto my-5">
         <div th:each="book : ${books}">
-            <form th:action="@{/books/save}" method="post"> <!-- форма для сохранения -->
+            <form th:action="@{/books/save}" method="post">
                 <input type="hidden" data-th-name="${_csrf.parameterName}"
                        data-th-value="${_csrf.token}"> <!-- CSRF токен -->
                 <input type="hidden" th:value="${book.id}" name="id">
@@ -80,11 +47,10 @@
                 </div>
             </form>
 
-            <!-- Отдельная форма для удаления книги -->
+
             <form th:action="@{'/books/' + ${book.id} + '/remove'}" method="post">
                 <input type="hidden" data-th-name="${_csrf.parameterName}"
                        data-th-value="${_csrf.token}">
-                <!-- CSRF токен для формы удаления -->
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group w-100">
                         <button type="submit" class="btn btn-danger">Удалить</button>

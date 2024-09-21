@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head >
+<head>
     <th:block th:insert="~{blocks/head_block :: head}"></th:block>
     <title>Books</title>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
 
-
 <main style="margin: 5%">
+
     <form action="/books/filter" method="get">
+        <input type="hidden" data-th-name="${_csrf.parameterName}"
+               data-th-value="${_csrf.token}">
         <div class="row mb-3">
             <div class="col">
                 <input type="text" name="title" class="form-control" placeholder="Поиск по названию">
@@ -34,18 +36,16 @@
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-primary">Фильтровать</button>
+                <button class="btn btn-primary mt-1"><a href="/books" style="color: white; text-decoration: none">Сбросить фильтр</a></button>
+                <button class="btn btn-primary mt-1"><a href="/books/stats" style="color: white; text-decoration: none">Статистика</a></button>
+            </div>
 
-            </div>
-            <div class="col">
-                <button class="btn btn-primary"><a href="/books" style="color: white; text-decoration: none">Сбросить фильтр</a> </button>
-            </div>
         </div>
     </form>
 
-
     <h2>Список должников</h2>
     <div class="table-responsive small">
-        <table class="table table-striped table-sm">
+        <table id="booksTable" class="table table-striped table-sm"> <!-- Добавлен id -->
             <thead>
             <tr>
                 <th scope="col">Заголовок</th>
@@ -54,12 +54,12 @@
                 <th scope="col">Дата выдачи</th>
                 <th scope="col">ФИО</th>
                 <th scope="col">Дата Возврата</th>
+                <th scope="col">Действие</th>
             </tr>
             </thead>
             <tbody>
             <div th:each="book : ${books}">
                 <tr class="clickable" th:onclick="'window.location.href=\'/books/' + ${book.id} + '\';'">
-<!--                <tr>-->
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
                     <td th:text="${book.publisher}"></td>
@@ -71,17 +71,26 @@
                     </td>
                 </tr>
             </div>
-
             </tbody>
         </table>
     </div>
 </main>
 
-
 <footer class="container py-5" th:insert="~{blocks/footer :: footer}"></footer>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Подсчитываем количество строк в таблице (кроме заголовка)
+        const bookTable = document.getElementById('booksTable');
+        const rowCount = bookTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
 
-<script src="/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
+        // Выводим количество книг
+        const counterElement = document.createElement('p');
+        counterElement.textContent = 'Всего книг: ' + rowCount;
+        document.querySelector('main').prepend(counterElement); // Добавляем текст перед таблицей
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
 </html>

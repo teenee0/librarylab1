@@ -1,8 +1,5 @@
 package com.example.librarylab1.Controllers;
 
-
-
-
 import com.example.librarylab1.models.Books;
 import com.example.librarylab1.repo.BooksRepository;
 import org.springframework.data.domain.Sort;
@@ -69,9 +66,25 @@ public class MainController {
         }
 
         model.addAttribute("books", books);
-        return "books"; // Имя шаблона
+        return "books";
     }
 
+    @GetMapping("/books/stats")
+    public String getBooksStats(Model model) {
+        List<Object[]> stats = booksRepository.findBookIssueStats();
+
+        List<String> dates = new ArrayList<>();
+        List<Long> counts = new ArrayList<>();
+
+        for (Object[] row : stats) {
+            dates.add(row[0].toString());
+            counts.add((Long) row[1]);
+        }
+
+        model.addAttribute("dates", dates);
+        model.addAttribute("counts", counts);
+        return "books_stats";
+    }
 
     @GetMapping("/bookadd")
     public String bookadd(Model model) {
@@ -84,16 +97,15 @@ public class MainController {
                               @RequestParam String publisher,
                               @RequestParam LocalDate give_date,
                               @RequestParam String studentName,
-                              @RequestParam(required = false) LocalDate date_take, // параметр может быть null
+                              @RequestParam(required = false) LocalDate date_take,
                               Model model) {
-        // Создаем объект книги, передавая null, если дата возврата не указана
         Books book = new Books(title, author, publisher, give_date, studentName, date_take);
         booksRepository.save(book);
         return "redirect:/books";
     }
     @GetMapping("/login")
     public String login() {
-        return "login"; // Это вернет шаблон login.html
+        return "login";
     }
 
     @GetMapping("/books/{id}")
@@ -114,7 +126,7 @@ public class MainController {
                            @RequestParam String publisher,
                            @RequestParam LocalDate give_date,
                            @RequestParam String studentName,
-                           @RequestParam(required = false) LocalDate date_take, // необязательный параметр
+                           @RequestParam(required = false) LocalDate date_take,
                            Model model) {
         Books book = booksRepository.findById(id).orElseThrow();
         book.setTitle(title);
@@ -126,7 +138,7 @@ public class MainController {
         if (date_take != null) {
             book.setDate_take(date_take);
         } else {
-            book.setDate_take(null); // устанавливаем null, если не передан
+            book.setDate_take(null);
         }
 
         booksRepository.save(book);
@@ -140,11 +152,5 @@ public class MainController {
         return "redirect:/books";
 
     }
-//    @GetMapping("/auth")
-//    public String greeting(Model model) {
-//        model.addAttribute("name", "Hello World");
-//        return "greeting";
-//    }
-
 }
 

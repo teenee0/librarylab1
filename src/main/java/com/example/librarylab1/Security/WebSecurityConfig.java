@@ -20,7 +20,7 @@ public class WebSecurityConfig {
         http
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/","books", "support", "/books/filter").permitAll()
+                        .requestMatchers("/","books", "support", "/books/filter", "/books/stats").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
