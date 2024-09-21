@@ -119,8 +119,8 @@ public class MainController {
         model.addAttribute("books", res);
         return "bookDetails";
     }
-    @PostMapping("/books/{id}")
-    public String bookEdit(@PathVariable("id") long id,
+    @PostMapping("/books/save")
+    public String bookEdit(@RequestParam("id") long id,
                            @RequestParam String title,
                            @RequestParam String author,
                            @RequestParam String publisher,

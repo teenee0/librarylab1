@@ -9,7 +9,7 @@
 <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
     <div class="col-md-6 p-lg-5 mx-auto my-5">
         <div th:each="book : ${books}">
-            <form th:action="@{/books/save}" method="post">
+            <form action="/books/save" method="post">
                 <input type="hidden" data-th-name="${_csrf.parameterName}"
                        data-th-value="${_csrf.token}"> <!-- CSRF токен -->
                 <input type="hidden" th:value="${book.id}" name="id">
